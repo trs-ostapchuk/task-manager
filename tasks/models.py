@@ -12,3 +12,16 @@ class TaskType(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Position(models.Model):
+    """
+    Represents a position within the company.
+    """
+    name = models.CharField(max_length=255)
+
+    class Meta:
+        ordering = ("name", )
+
+    def __str__(self):
+        return self.name
