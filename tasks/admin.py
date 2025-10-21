@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from tasks.models import Worker
+from tasks.models import Worker, Position
 
 
 @admin.register(Worker)
@@ -24,3 +24,12 @@ class WorkerAdmin(admin.ModelAdmin):
         ("Permissions", {"fields": ("is_active", "is_staff", "is_superuser", "groups", "user_permissions")}),
         ("Additional info", {"fields": ("position", )}),
     )
+
+
+@admin.register(Position)
+class PositionAdmin(admin.ModelAdmin):
+    """
+    Simple admin for managing position
+    """
+    list_display = ("name", )
+    search_fields = ("name", )
