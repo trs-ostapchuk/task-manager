@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from tasks.models import Worker, Position
+from tasks.models import Worker, Position, Task, TaskType
 
 
 @admin.register(Worker)
@@ -33,3 +33,12 @@ class PositionAdmin(admin.ModelAdmin):
     """
     list_display = ("name", )
     search_fields = ("name", )
+
+
+@admin.register(TaskType)
+class TaskTypeAdmin(admin.ModelAdmin):
+    """
+    Simple admin for managing position
+    """
+    list_display = ("name",)
+    search_fields = ("name",)
