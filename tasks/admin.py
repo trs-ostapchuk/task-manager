@@ -42,3 +42,16 @@ class TaskTypeAdmin(admin.ModelAdmin):
     """
     list_display = ("name",)
     search_fields = ("name",)
+
+
+@admin.register(Task)
+class TaskAdmin(admin.ModelAdmin):
+    """
+    Admin panel configuration for the Task model.
+    """
+    list_display = (
+        "name", "deadline", "is_completed", "priority", "task_type"
+    )
+    list_filter = ("priority", "task_type", "deadline")
+    search_fields = ("name", )
+    ordering = ("name", )
