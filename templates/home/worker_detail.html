@@ -1,0 +1,54 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="pcoded-main-container">
+  <div class="pcoded-content">
+    <div class="page-header">
+      <div class="page-block">
+        <div class="row align-items-center">
+          <div class="col-md-12">
+            <div class="page-header-title">
+              <h5 class="m-b-10">Worker Profile</h5>
+            </div>
+            <ul class="breadcrumb">
+              <li class="breadcrumb-item"><a href="#"><i class="feather icon-home"></i></a></li>
+              <li class="breadcrumb-item"><a href="#">Profile</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Profile card -->
+      <div class="col-md-4">
+        <div class="card user-card">
+          <div class="card-body text-center">
+            <img src="{% static 'images/avatar.png' %}" class="img-radius mb-3" alt="User-Profile-Image" width="100">
+            <h6 class="f-w-600">{{ worker.name }}</h6>
+            <p>{{ worker.position }}</p>
+            <hr>
+            <p><i class="feather icon-mail"></i> {{ worker.email }}</p>
+            <p><i class="feather icon-phone"></i> {{ worker.phone }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity / Stats -->
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header">
+            <h5>Task Overview</h5>
+          </div>
+          <div class="card-body">
+            <p>Total Tasks: <strong>{{ worker.tasks.count }}</strong></p>
+            <p>Completed: <strong>{{ worker.tasks_completed }}</strong></p>
+            <p>In Progress: <strong>{{ worker.tasks_in_progress }}</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

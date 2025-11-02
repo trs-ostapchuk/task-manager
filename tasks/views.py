@@ -12,3 +12,8 @@ def index(request: HttpRequest) -> HttpResponse:
 class WorkerListView(generic.ListView):
     model = Worker
     template_name = "home/worker_list.html"
+
+
+class WorkerDetailView(generic.DetailView):
+    model = Worker
+    template_name = "home/worker_detail.html"
