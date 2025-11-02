@@ -1,59 +1,69 @@
 {% extends "layouts/base.html" %}
 
-{% block title %} UI Tables {% endblock %}
-
-<!-- Specific Page CSS goes HERE  -->
-{% block stylesheets %}{% endblock stylesheets %}
+{% load static %}
 
 {% block content %}
-
-<!-- [ Main Content ] start -->
-<section class="pcoded-main-container">
+<div class="pcoded-main-container">
   <div class="pcoded-content">
-    <!-- [ Main Content ] start -->
-    <div class="row">
-      <!-- [ basic-table ] start -->
-      <div class="col-xl-12">
-        <div class="card">
-          <div class="card-header">
-            <h5>Worker List</h5>
-          </div>
-          <div class="card-body table-border-style">
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
-                <tr>
-                  <th>#</th>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>Username</th>
-                  <th>Email</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for worker in worker_list %}
-                <tr>
-                  <td>{{ worker.id }}</td>
-                  <td>{{ worker.first_name }}</td>
-                  <td>{{ worker.last_name }}</td>
-                  <td>{{ worker.username }}</td>
-                  <td>{{ worker.email }}</td>
-                </tr>
-                {% endfor %}
-                </tbody>
-              </table>
+
+    <!-- Header -->
+    <div class="page-header">
+      <div class="page-block">
+        <div class="row align-items-center">
+          <div class="col-md-12">
+            <div class="page-header-title">
+              <h5 class="m-b-10">Workers List</h5>
             </div>
+            <ul class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="#"><i class="feather icon-home"></i></a>
+              </li>
+              <li class="breadcrumb-item"><a href="#">Workers</a></li>
+            </ul>
           </div>
         </div>
       </div>
-      <!-- [ basic-table ] end -->
     </div>
-    <!-- [ Main Content ] end -->
+
+    <!-- Content -->
+    <div class="card">
+      <div class="card-header">
+        <h5>All Workers</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Tasks Count</th>
+                <th>Profile</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for worker in worker_list %}
+              <tr>
+                <td>{{ worker.username }}</td>
+                <td>{{ worker.email }}</td>
+                <td>{{ worker.tasks.count }}</td>
+                <td>
+                  <a href="{% url 'tasks:worker-detail' worker.id %}" class="btn btn-sm btn-primary">
+                    View Profile
+                  </a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5" class="text-center text-muted">No workers found</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
   </div>
-</section>
-<!-- [ Main Content ] end -->
-
-{% endblock content %}
-
-<!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+</div>
+{% endblock %}
