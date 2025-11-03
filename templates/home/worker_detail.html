@@ -4,6 +4,7 @@
 {% block content %}
 <div class="pcoded-main-container">
   <div class="pcoded-content">
+    <!-- Header -->
     <div class="page-header">
       <div class="page-block">
         <div class="row align-items-center">
@@ -12,7 +13,10 @@
               <h5 class="m-b-10">Worker Profile</h5>
             </div>
             <ul class="breadcrumb">
-              <li class="breadcrumb-item"><a href="#"><i class="feather icon-home"></i></a></li>
+              <li class="breadcrumb-item">
+                <a href="#"><i class="feather icon-home"></i></a>
+              </li>
+              <li class="breadcrumb-item"><a href="{% url 'tasks:worker-list' %}">Workers</a></li>
               <li class="breadcrumb-item"><a href="#">Profile</a></li>
             </ul>
           </div>
@@ -20,35 +24,42 @@
       </div>
     </div>
 
+    <!-- Profile content -->
     <div class="row">
-      <!-- Profile card -->
       <div class="col-md-4">
         <div class="card user-card">
           <div class="card-body text-center">
-            <img src="{% static 'images/avatar.png' %}" class="img-radius mb-3" alt="User-Profile-Image" width="100">
-            <h6 class="f-w-600">{{ worker.name }}</h6>
-            <p>{{ worker.position }}</p>
+            <img src="{% static 'images/avatar.png' %}" class="img-radius mb-3" alt="User Image" width="100">
+            <h6 class="f-w-600">{{ worker.username }}</h6>
+            <p class="text-muted mb-1">ID: {{ worker.id }}</p>
+            <p class="text-muted">{{ worker.position|default:"No position" }}</p>
             <hr>
-            <p><i class="feather icon-mail"></i> {{ worker.email }}</p>
-            <p><i class="feather icon-phone"></i> {{ worker.phone }}</p>
+            <h6 class="text-muted mt-3">Task Completion</h6>
+            <div class="progress mt-2" style="height: 8px;">
+              <div class="progress-bar bg-success" role="progressbar"
+                   style="width: {{ completion_percent }}%"
+                   aria-valuenow="{{ completion_percent }}" aria-valuemin="0" aria-valuemax="100">
+              </div>
+            </div>
+            <p class="mt-2">{{ completion_percent }}% completed</p>
           </div>
         </div>
       </div>
 
-      <!-- Activity / Stats -->
       <div class="col-md-8">
         <div class="card">
           <div class="card-header">
-            <h5>Task Overview</h5>
+            <h5>Tasks Overview</h5>
           </div>
           <div class="card-body">
-            <p>Total Tasks: <strong>{{ worker.tasks.count }}</strong></p>
-            <p>Completed: <strong>{{ worker.tasks_completed }}</strong></p>
-            <p>In Progress: <strong>{{ worker.tasks_in_progress }}</strong></p>
+            <p><strong>Total Tasks:</strong> {{ total_tasks }}</p>
+            <p><strong>Completed Tasks:</strong> {{ completed_tasks }}</p>
+            <p><strong>In Progress:</strong> {{ in_progress_tasks }}</p>
           </div>
         </div>
       </div>
     </div>
+
   </div>
 </div>
 {% endblock %}
