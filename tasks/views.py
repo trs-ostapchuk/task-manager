@@ -13,6 +13,9 @@ class WorkerListView(generic.ListView):
     model = Worker
     template_name = "home/worker_list.html"
 
+    def get_queryset(self):
+        return Worker.objects.prefetch_related("tasks")
+
 
 class WorkerDetailView(generic.DetailView):
     model = Worker
