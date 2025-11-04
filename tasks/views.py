@@ -80,7 +80,8 @@ class TaskListView(generic.ListView):
 
 class TaskDetailView(generic.DetailView):
     """
-
+    Class-based view that displays a detail of task.
+    Uses the 'home/task_detail.html' template.
     """
     model = Task
     template_name = "home/task_detail.html"
