@@ -70,5 +70,17 @@ class PositionListView(generic.ListView):
 
 
 class TaskListView(generic.ListView):
+    """
+    Class-based view that displays a list of all tasks.
+    Uses the 'home/task_list.html' template.
+    """
     model = Task
     template_name = "home/task_list.html"
+
+
+class TaskDetailView(generic.DetailView):
+    """
+
+    """
+    model = Task
+    template_name = "home/task_detail.html"

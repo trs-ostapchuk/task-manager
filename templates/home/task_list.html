@@ -47,7 +47,11 @@
               {% for task in task_list %}
               <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ task.name }}</td>
+                <td>
+                  <a href="{% url 'tasks:task-detail' task.id %}">
+                    {{ task.name }}
+                  </a>
+                </td>
                 <td>{{ task.task_type.name }}</td>
                 <td>
                   {% if task.priority == "Urgent" %}
