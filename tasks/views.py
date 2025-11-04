@@ -2,7 +2,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.views import generic
 
-from tasks.models import Worker
+from tasks.models import Worker, Position
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -58,3 +58,12 @@ class WorkerDetailView(generic.DetailView):
         })
 
         return context
+
+
+class PositionListView(generic.ListView):
+    """
+    Class-based view that displays a list of all position.
+    Uses the 'home/position_list.html' template.
+    """
+    model = Position
+    template_name = "home/position_list.html"
