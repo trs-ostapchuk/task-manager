@@ -2,7 +2,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.views import generic
 
-from tasks.models import Worker, Position
+from tasks.models import Worker, Position, Task
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -67,3 +67,8 @@ class PositionListView(generic.ListView):
     """
     model = Position
     template_name = "home/position_list.html"
+
+
+class TaskListView(generic.ListView):
+    model = Task
+    template_name = "home/task_list.html"

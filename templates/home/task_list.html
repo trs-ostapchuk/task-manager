@@ -1,0 +1,96 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="pcoded-main-container">
+  <div class="pcoded-content">
+
+    <!-- Header -->
+    <div class="page-header">
+      <div class="page-block">
+        <div class="row align-items-center">
+          <div class="col-md-12">
+            <div class="page-header-title">
+              <h5 class="m-b-10">Tasks List</h5>
+            </div>
+            <ul class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="#"><i class="feather icon-home"></i></a>
+              </li>
+              <li class="breadcrumb-item"><a href="#">Tasks</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="card">
+      <div class="card-header">
+        <h5>All Tasks</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Task Name</th>
+                <th>Task Type</th>
+                <th>Priority</th>
+                <th>Deadline</th>
+                <th>Assigned Workers</th>
+                <th>Completed</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for task in task_list %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ task.name }}</td>
+                <td>{{ task.task_type.name }}</td>
+                <td>
+                  {% if task.priority == "Urgent" %}
+                    <span class="badge bg-danger">{{ task.priority }}</span>
+                  {% elif task.priority == "High" %}
+                    <span class="badge bg-warning text-dark">{{ task.priority }}</span>
+                  {% elif task.priority == "Medium" %}
+                    <span class="badge bg-info text-dark">{{ task.priority }}</span>
+                  {% else %}
+                    <span class="badge bg-secondary">{{ task.priority }}</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if task.deadline %}
+                    {{ task.deadline|date:"Y-m-d H:i" }}
+                  {% else %}
+                    <span class="text-muted">No deadline</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <span class="badge bg-primary">{{ task.assignees.count }}</span>
+                </td>
+                <td>
+                  {% if task.is_completed %}
+                    <span class="badge bg-success">Yes</span>
+                  {% else %}
+                    <span class="badge bg-danger">No</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="7" class="text-center text-muted">
+                  No tasks found
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
