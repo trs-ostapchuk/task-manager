@@ -16,6 +16,7 @@ class WorkerListView(generic.ListView):
     """
     model = Worker
     template_name = "home/worker_list.html"
+    paginate_by = 10
 
     def get_queryset(self):
         """
