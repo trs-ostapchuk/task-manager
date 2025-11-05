@@ -76,6 +76,10 @@ class TaskListView(generic.ListView):
     """
     model = Task
     template_name = "home/task_list.html"
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Task.objects.select_related("task_type").prefetch_related("assignees")
 
 
 class TaskDetailView(generic.DetailView):
