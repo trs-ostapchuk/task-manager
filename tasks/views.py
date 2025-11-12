@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.views import generic
@@ -9,7 +10,7 @@ def index(request: HttpRequest) -> HttpResponse:
     return render(request, "home/index.html")
 
 
-class WorkerListView(generic.ListView):
+class WorkerListView(LoginRequiredMixin, generic.ListView):
     """
     Class-based view that displays a list of all workers.
     Uses the 'home/worker_list.html' template.
@@ -27,7 +28,7 @@ class WorkerListView(generic.ListView):
         return Worker.objects.prefetch_related("tasks")
 
 
-class WorkerDetailView(generic.DetailView):
+class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     """
     Class-based view for displaying detailed information about a single worker.
     Shows basic info along with statistics about their assigned tasks.
@@ -61,7 +62,7 @@ class WorkerDetailView(generic.DetailView):
         return context
 
 
-class PositionListView(generic.ListView):
+class PositionListView(LoginRequiredMixin, generic.ListView):
     """
     Class-based view that displays a list of all position.
     Uses the 'home/position_list.html' template.
@@ -70,7 +71,7 @@ class PositionListView(generic.ListView):
     template_name = "home/position_list.html"
 
 
-class TaskListView(generic.ListView):
+class TaskListView(LoginRequiredMixin, generic.ListView):
     """
     Class-based view that displays a list of all tasks.
     Uses the 'home/task_list.html' template.
@@ -83,7 +84,7 @@ class TaskListView(generic.ListView):
         return Task.objects.select_related("task_type").prefetch_related("assignees")
 
 
-class TaskDetailView(generic.DetailView):
+class TaskDetailView(LoginRequiredMixin, generic.DetailView):
     """
     Class-based view that displays a detail of task.
     Uses the 'home/task_detail.html' template.
