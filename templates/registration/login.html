@@ -15,9 +15,9 @@
 
 							<h4 class="mb-3 f-w-400">Sign IN</h4>
 							<span class="mb-2 text-muted">
-								{% if msg %}
+								{% if form.errors %}
 									<span class="text-danger">
-										{{ msg | safe }}
+										Invalid credentials!
 									</span>
 								{% else %}
 									Add your credentials
@@ -26,21 +26,11 @@
 
 							<br /><br />
 
-							<form role="form" method="post" action="">
-
+							<form role="form" method="post" action="{% url 'login' %}">
 								{% csrf_token %}
-
-								<div class="input-group mb-3">
-									<span class="input-group-text"><i class="feather icon-user"></i></span>
-									{{ form.username }}
-								</div>
-								<div class="input-group mb-4">
-									<span class="input-group-text"><i class="feather icon-lock"></i></span>
-									{{ form.password }}
-								</div>
-
+								{{ form.as_p }}
 								<button type="submit" name="login" class="btn btn-block btn-primary mt-2 mb-4">Sign In</button>
-							
+
 							</form>
 
 							<p class="mb-2">Don't have an account? <a href="#" class="f-w-400">Sign UP</a></p>
