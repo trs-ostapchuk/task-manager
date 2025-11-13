@@ -71,7 +71,7 @@ class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
     """
     model = Worker
     form_class = WorkerCreationForm
-    success_url = reverse_lazy("home:worker-list")
+    success_url = reverse_lazy("tasks:worker-list")
     template_name = "home/worker_form.html"
 
 
