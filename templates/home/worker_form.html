@@ -15,9 +15,9 @@
             </div>
             <ul class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="{% url 'home:worker-list' %}"><i class="feather icon-users"></i></a>
+                <a href="{% url 'tasks:worker-list' %}"><i class="feather icon-users"></i></a>
               </li>
-              <li class="breadcrumb-item"><a href="{% url 'home:worker-list' %}">Workers</a></li>
+              <li class="breadcrumb-item"><a href="{% url 'tasks:worker-list' %}">Workers</a></li>
               <li class="breadcrumb-item"><a href="#">Create Worker</a></li>
             </ul>
           </div>
@@ -49,7 +49,7 @@
           {% endfor %}
 
           <div class="mt-4 d-flex justify-content-between">
-            <a href="{% url 'home:worker-list' %}" class="btn btn-outline-secondary">
+            <a href="{% url 'tasks:worker-list' %}" class="btn btn-outline-secondary">
               <i class="feather icon-arrow-left"></i> Back
             </a>
             <button type="submit" class="btn btn-primary">
