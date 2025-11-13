@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views import generic
 
 from tasks.models import Worker, Position, Task
@@ -60,6 +61,17 @@ class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
         })
 
         return context
+
+
+class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
+    """
+    Allows authenticated users to create a new worker.
+    Redirects to the worker list after successful creation.
+    """
+    model = Worker
+    fields = "__all__"
+    success_url = reverse_lazy("home:worker-list")
+    template_name = "home/worker_form.html"
 
 
 class PositionListView(LoginRequiredMixin, generic.ListView):
