@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
+from tasks.forms import WorkerCreationForm
 from tasks.models import Worker, Position, Task
 
 
@@ -69,7 +70,7 @@ class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
     Redirects to the worker list after successful creation.
     """
     model = Worker
-    fields = "__all__"
+    form_class = WorkerCreationForm
     success_url = reverse_lazy("home:worker-list")
     template_name = "home/worker_form.html"
 
