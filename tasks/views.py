@@ -75,6 +75,10 @@ class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
     template_name = "home/worker_form.html"
 
 
+class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
+    pass
+
+
 class PositionListView(LoginRequiredMixin, generic.ListView):
     """
     Class-based view that displays a list of all position.
