@@ -76,7 +76,10 @@ class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
 
 
 class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
-    pass
+    model = Worker
+    fields = ("username", "first_name", "last_name", "email", "position")
+    success_url = reverse_lazy("tasks:worker-list")
+    template_name = "home/worker_form.html"
 
 
 class PositionListView(LoginRequiredMixin, generic.ListView):
