@@ -20,3 +20,20 @@ class WorkerCreationForm(UserCreationForm):
             "email": forms.EmailInput(attrs={"class": "form-control"}),
             "position": forms.Select(attrs={"class": "form-select"}),
         }
+
+
+class WorkerUpdateForm(forms.ModelForm):
+    """
+    Form for editing Worker (custom user model) without password fields.
+    """
+    class Meta:
+        model = Worker
+        fields = ("username", "first_name", "last_name", "email", "position")
+
+        widgets = {
+            "username": forms.TextInput(attrs={"class": "form-control"}),
+            "first_name": forms.TextInput(attrs={"class": "form-control"}),
+            "last_name": forms.TextInput(attrs={"class": "form-control"}),
+            "email": forms.EmailInput(attrs={"class": "form-control"}),
+            "position": forms.Select(attrs={"class": "form-select"}),
+        }
