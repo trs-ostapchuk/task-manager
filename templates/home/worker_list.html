@@ -43,6 +43,7 @@
                 <th>Position</th>
                 <th>Tasks Count</th>
                 <th>Profile</th>
+                <th>Update</th>
               </tr>
             </thead>
             <tbody>
@@ -55,6 +56,11 @@
                 <td>
                   <a href="{% url 'tasks:worker-detail' worker.id %}" class="btn btn-sm btn-primary">
                     View Profile
+                  </a>
+                </td>
+                <td>
+                  <a href="{% url 'tasks:worker-update' worker.id %}" class="btn btn-sm btn-warning">
+                    Edit Profile
                   </a>
                 </td>
               </tr>
