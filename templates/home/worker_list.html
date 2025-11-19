@@ -44,6 +44,7 @@
                 <th>Tasks Count</th>
                 <th>Profile</th>
                 <th>Update</th>
+                <th>Delete</th>
               </tr>
             </thead>
             <tbody>
@@ -61,6 +62,11 @@
                 <td>
                   <a href="{% url 'tasks:worker-update' worker.id %}" class="btn btn-sm btn-warning">
                     Edit Profile
+                  </a>
+                </td>
+                <td>
+                  <a href="{% url 'tasks:worker-delete' worker.id %}" class="btn btn-sm btn-danger">
+                    Delete Profile
                   </a>
                 </td>
               </tr>

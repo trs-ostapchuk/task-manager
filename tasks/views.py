@@ -91,7 +91,7 @@ class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
     """
     model = Worker
     template_name = "home/worker_confirm_delete.html"
-    success_url = reverse_lazy("home:worker-list")
+    success_url = reverse_lazy("tasks:worker-list")
 
 
 class PositionListView(LoginRequiredMixin, generic.ListView):
