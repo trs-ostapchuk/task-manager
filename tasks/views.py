@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
-from tasks.forms import WorkerCreationForm
+from tasks.forms import WorkerCreationForm, WorkerUpdateForm
 from tasks.models import Worker, Position, Task
 
 
@@ -76,10 +76,13 @@ class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
 
 
 class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
+    """
+    Allows editing of an existing worker's profile.
+    """
     model = Worker
-    fields = ("username", "first_name", "last_name", "email", "position")
-    success_url = reverse_lazy("tasks:worker-list")
+    form_class = WorkerUpdateForm
     template_name = "home/worker_form.html"
+    success_url = reverse_lazy("home:worker-list")
 
 
 class PositionListView(LoginRequiredMixin, generic.ListView):
