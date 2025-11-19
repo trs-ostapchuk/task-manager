@@ -85,6 +85,15 @@ class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
     success_url = reverse_lazy("home:worker-list")
 
 
+class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
+    """
+    Allows deleting a worker (user account) with confirmation page.
+    """
+    model = Worker
+    template_name = "home/worker_confirm_delete.html"
+    success_url = reverse_lazy("home:worker-list")
+
+
 class PositionListView(LoginRequiredMixin, generic.ListView):
     """
     Class-based view that displays a list of all position.
