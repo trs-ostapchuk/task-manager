@@ -48,9 +48,23 @@
 
       <div class="col-md-8">
         <div class="card">
-          <div class="card-header">
-            <h5>Tasks Overview</h5>
+
+          <!-- Added header with action buttons -->
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Tasks Overview</h5>
+
+            <div>
+              <a href="{% url 'tasks:worker-update' worker.id %}" class="btn btn-sm btn-warning me-2">
+                <i class="feather icon-edit"></i> Edit Profile
+              </a>
+
+              <a href="{% url 'tasks:worker-delete' worker.id %}" class="btn btn-sm btn-danger">
+                <i class="feather icon-trash"></i> Delete Profile
+              </a>
+            </div>
           </div>
+          <!-- End added header -->
+
           <div class="card-body">
             <p><strong>Total Tasks:</strong> {{ total_tasks }}</p>
             <p><strong>Completed Tasks:</strong> {{ completed_tasks }}</p>
