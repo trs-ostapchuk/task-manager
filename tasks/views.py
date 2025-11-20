@@ -133,3 +133,13 @@ class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     form_class = TaskForm
     template_name = "home/task_form.html"
     success_url = reverse_lazy("tasks:task-list")
+
+
+class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
+    """
+    Allows editing an existing task.
+    """
+    model = Task
+    form_class = TaskForm
+    template_name = "home/task_form.html"
+    success_url = reverse_lazy("tasks:task-list")
