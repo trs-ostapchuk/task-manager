@@ -39,6 +39,24 @@ class WorkerUpdateForm(forms.ModelForm):
         }
 
 
+class WorkerSearchForm(forms.Form):
+    """
+    Field for searching Worker
+    """
+    username = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control form-control-sm",
+                "placeholder": "Search by username",
+                "style": "width: 300px;",
+            }
+        )
+    )
+
+
 class TaskForm(forms.ModelForm):
     """Form for creating and updating tasks with styled widgets."""
 
