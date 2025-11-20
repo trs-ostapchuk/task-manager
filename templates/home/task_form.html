@@ -5,12 +5,11 @@
 <div class="pcoded-main-container">
   <div class="pcoded-content">
 
-    <!-- Page Header -->
+    <!-- Header -->
     <div class="page-header">
       <div class="page-block">
         <div class="row align-items-center">
           <div class="col-md-12">
-
             <div class="page-header-title">
               <h5 class="m-b-10">
                 {% if object %}Update Task{% else %}Create Task{% endif %}
@@ -36,33 +35,23 @@
       </div>
     </div>
 
-    <!-- Form Card -->
+    <!-- Form -->
     <div class="card">
       <div class="card-header">
-        <h5>
-          {% if object %}
-            Edit Task: {{ object.name }}
-          {% else %}
-            Add a New Task
-          {% endif %}
-        </h5>
+        <h5>{% if object %}Edit Task{% else %}Create Task{% endif %}</h5>
       </div>
 
       <div class="card-body">
-
         <form method="post">
           {% csrf_token %}
 
           {% for field in form %}
             <div class="mb-3">
-              <label class="form-label" for="{{ field.id_for_label }}">
-                {{ field.label }}
-              </label>
-
+              <label class="form-label">{{ field.label }}</label>
               {{ field }}
 
               {% if field.help_text %}
-                <small class="form-text text-muted">{{ field.help_text }}</small>
+                <small class="text-muted d-block">{{ field.help_text }}</small>
               {% endif %}
 
               {% for error in field.errors %}
@@ -83,7 +72,6 @@
           </div>
 
         </form>
-
       </div>
     </div>
 
