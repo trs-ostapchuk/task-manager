@@ -4,7 +4,12 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
-from tasks.forms import WorkerCreationForm, WorkerUpdateForm, TaskForm
+from tasks.forms import (
+    WorkerCreationForm,
+    WorkerUpdateForm,
+    TaskForm,
+    WorkerSearchForm,
+)
 from tasks.models import Worker, Position, Task
 
 
@@ -21,13 +26,26 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
     template_name = "home/worker_list.html"
     paginate_by = 10
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(WorkerListView, self).get_context_data(**kwargs)
+        username = self.request.GET.get("username", "")
+        context["search_form"] = WorkerSearchForm(
+            initial={"username": username}
+        )
+        return context
+
     def get_queryset(self):
         """
         Returns a queryset of all workers with their related tasks preloaded.
         Using `prefetch_related("tasks")` improves performance by avoiding
         the N+1 query problem when accessing each worker’s tasks.
+        Implement search by username
         """
-        return Worker.objects.prefetch_related("tasks")
+        queryset = Worker.objects.prefetch_related("tasks")
+        form = WorkerSearchForm(self.request.GET)
+        if form.is_valid():
+            queryset = queryset.filter(username__icontains=form.cleaned_data["username"])
+        return queryset
 
 
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
