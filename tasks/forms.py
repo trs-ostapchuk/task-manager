@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from tasks.models import Worker
+from tasks.models import Worker, Task
 
 
 class WorkerCreationForm(UserCreationForm):
@@ -36,4 +36,24 @@ class WorkerUpdateForm(forms.ModelForm):
             "last_name": forms.TextInput(attrs={"class": "form-control"}),
             "email": forms.EmailInput(attrs={"class": "form-control"}),
             "position": forms.Select(attrs={"class": "form-select"}),
+        }
+
+
+class TaskForm(forms.ModelForm):
+    """Form for creating and updating tasks with styled widgets."""
+
+    class Meta:
+        model = Task
+        fields = "__all__"
+
+        widgets = {
+            "name": forms.TextInput(attrs={"class": "form-control"}),
+            "description": forms.Textarea(attrs={"class": "form-control", "rows": 4}),
+            "deadline": forms.DateTimeInput(
+                attrs={"class": "form-control", "type": "datetime-local"}
+            ),
+            "priority": forms.Select(attrs={"class": "form-control"}),
+            "task_type": forms.Select(attrs={"class": "form-control"}),
+            "assignees": forms.SelectMultiple(attrs={"class": "form-control"}),
+            "is_completed": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
