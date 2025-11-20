@@ -75,3 +75,21 @@ class TaskForm(forms.ModelForm):
             "assignees": forms.SelectMultiple(attrs={"class": "form-control"}),
             "is_completed": forms.CheckboxInput(attrs={"class": "form-check-input"}),
         }
+
+
+class TaskSearchForm(forms.Form):
+    """
+    Field for searching Worker
+    """
+    name = forms.CharField(
+        max_length=255,
+        required=False,
+        label="",
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control form-control-sm",
+                "placeholder": "Search by task",
+                "style": "width: 300px;",
+            }
+        )
+    )
