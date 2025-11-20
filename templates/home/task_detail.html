@@ -40,21 +40,21 @@
             <p>
               <strong>Priority:</strong>
               {% if task.priority == "Urgent" %}
-                <span class="badge bg-danger">{{ task.priority }}</span>
+              <span class="badge bg-danger">{{ task.priority }}</span>
               {% elif task.priority == "High" %}
-                <span class="badge bg-warning text-dark">{{ task.priority }}</span>
+              <span class="badge bg-warning text-dark">{{ task.priority }}</span>
               {% elif task.priority == "Medium" %}
-                <span class="badge bg-info text-dark">{{ task.priority }}</span>
+              <span class="badge bg-info text-dark">{{ task.priority }}</span>
               {% else %}
-                <span class="badge bg-secondary">{{ task.priority }}</span>
+              <span class="badge bg-secondary">{{ task.priority }}</span>
               {% endif %}
             </p>
             <p>
               <strong>Completed:</strong>
               {% if task.is_completed %}
-                <span class="badge bg-success">Yes</span>
+              <span class="badge bg-success">Yes</span>
               {% else %}
-                <span class="badge bg-danger">No</span>
+              <span class="badge bg-danger">No</span>
               {% endif %}
             </p>
           </div>
@@ -63,9 +63,9 @@
             <p>
               <strong>Deadline:</strong>
               {% if task.deadline %}
-                {{ task.deadline|date:"Y-m-d H:i" }}
+              {{ task.deadline|date:"Y-m-d H:i" }}
               {% else %}
-                <span class="text-muted">No deadline</span>
+              <span class="text-muted">No deadline</span>
               {% endif %}
             </p>
             <p><strong>Created:</strong> {{ task.created_at|default:"-" }}</p>
@@ -85,9 +85,9 @@
         <div>
           <h6><strong>Assigned Workers:</strong></h6>
           {% if task.assignees.all %}
-            <ul class="list-group">
-              {% for worker in task.assignees.all %}
-                <li class="list-group-item d-flex justify-content-between align-items-center">
+          <ul class="list-group">
+            {% for worker in task.assignees.all %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
                   <span>
                     <i class="feather icon-user text-primary"></i>
                     {{ worker.username }}
@@ -95,16 +95,27 @@
                       <span class="text-muted">({{ worker.position.name }})</span>
                     {% endif %}
                   </span>
-                  <a href="{% url 'tasks:worker-detail' worker.id %}" class="btn btn-sm btn-outline-primary">
-                    View Profile
-                  </a>
-                </li>
-              {% endfor %}
-            </ul>
+              <a href="{% url 'tasks:worker-detail' worker.id %}" class="btn btn-sm btn-outline-primary">
+                View Profile
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
           {% else %}
-            <p class="text-muted">No workers assigned to this task.</p>
+          <p class="text-muted">No workers assigned to this task.</p>
           {% endif %}
         </div>
+
+        <div class="d-flex justify-content-end mt-3">
+          <a href="{% url 'tasks:task-update' task.id %}" class="btn btn-warning me-2">
+            <i class="feather icon-edit"></i> Edit Task
+          </a>
+
+          <a href="{% url 'tasks:task-delete' task.id %}" class="btn btn-danger">
+            <i class="feather icon-trash-2"></i> Delete Task
+          </a>
+        </div>
+
       </div>
     </div>
 
