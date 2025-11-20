@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
-from tasks.forms import WorkerCreationForm, WorkerUpdateForm
+from tasks.forms import WorkerCreationForm, WorkerUpdateForm, TaskForm
 from tasks.models import Worker, Position, Task
 
 
@@ -128,10 +128,8 @@ class TaskDetailView(LoginRequiredMixin, generic.DetailView):
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     """
     Creates a new task using Django's generic CreateView.
-    - Renders a form automatically based on the Task model
-    - After successful creation redirects to the task list
     """
     model = Task
-    fields = "__all__"
+    form_class = TaskForm
     template_name = "home/task_form.html"
     success_url = reverse_lazy("tasks:task-list")
