@@ -1,0 +1,25 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="pcoded-main-container">
+  <div class="pcoded-content">
+
+    <div class="card">
+      <div class="card-header">
+        <h5>Delete Task</h5>
+      </div>
+
+      <div class="card-body">
+        <p>Are you sure you want to delete <strong>{{ task.name }}</strong>?</p>
+
+        <form method="post">
+          {% csrf_token %}
+          <button class="btn btn-danger">Delete</button>
+          <a href="{% url 'tasks:task-detail' task.id %}" class="btn btn-secondary">Cancel</a>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
