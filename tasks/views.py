@@ -123,3 +123,15 @@ class TaskDetailView(LoginRequiredMixin, generic.DetailView):
     """
     model = Task
     template_name = "home/task_detail.html"
+
+
+class TaskCreateView(LoginRequiredMixin, generic.CreateView):
+    """
+    Creates a new task using Django's generic CreateView.
+    - Renders a form automatically based on the Task model
+    - After successful creation redirects to the task list
+    """
+    model = Task
+    fields = "__all__"
+    template_name = "home/task_form.html"
+    success_url = reverse_lazy("tasks:task-list")
