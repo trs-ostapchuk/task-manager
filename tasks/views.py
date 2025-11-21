@@ -9,7 +9,7 @@ from tasks.forms import (
     WorkerUpdateForm,
     TaskForm,
     WorkerSearchForm,
-    TaskSearchForm,
+    TaskSearchForm, PositionForm,
 )
 from tasks.models import Worker, Position, Task
 
@@ -120,6 +120,16 @@ class PositionListView(LoginRequiredMixin, generic.ListView):
     """
     model = Position
     template_name = "home/position_list.html"
+
+
+class PositionCreateView(LoginRequiredMixin, generic.CreateView):
+    """
+    Creates a new position using Django's generic CreateView.
+    """
+    model = Position
+    form_class = PositionForm
+    template_name = "home/position_form.html"
+    success_url = reverse_lazy("tasks:position-list")
 
 
 class TaskListView(LoginRequiredMixin, generic.ListView):
