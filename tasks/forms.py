@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from tasks.models import Worker, Task
+from tasks.models import Worker, Task, Position
 
 
 class WorkerCreationForm(UserCreationForm):
@@ -93,3 +93,15 @@ class TaskSearchForm(forms.Form):
             }
         )
     )
+
+
+class PositionForm(forms.ModelForm):
+    """Form for creating and updating position with styled widgets."""
+
+    class Meta:
+        model = Position
+        fields = "__all__"
+
+        widgets = {
+            "name": forms.TextInput(attrs={"class": "form-control"}),
+        }
