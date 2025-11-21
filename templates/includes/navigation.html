@@ -14,36 +14,27 @@
   </div>
 
   <div class="collapse navbar-collapse">
-    <ul class="navbar-nav me-auto">
-      <li class="nav-item">
-        <a href="#" class="pop-search"><i class="feather icon-search"></i></a>
-        <div class="search-bar">
-          <input type="text" class="form-control border-0 shadow-none" placeholder="Search here">
-          <button type="button" class="btn-close" aria-label="Close"></button>
-        </div>
-      </li>
-    </ul>
 
     <!-- Right-side auth navigation -->
     <ul class="navbar-nav ms-auto align-items-center">
       {% if request.user.is_authenticated %}
-        <li class="nav-item me-3 text-white">
-          Hello, <strong>{{ request.user.username }}</strong>
-        </li>
-        <li class="nav-item">
-          <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-outline-light btn-sm">
-              <i class="feather icon-log-out me-1"></i> Logout
-            </button>
-          </form>
-        </li>
+      <li class="nav-item me-3 text-white">
+        Hello, <strong>{{ request.user.username }}</strong>
+      </li>
+      <li class="nav-item">
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-light btn-sm">
+            <i class="feather icon-log-out me-1"></i> Logout
+          </button>
+        </form>
+      </li>
       {% else %}
-        <li class="nav-item">
-          <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">
-            <i class="feather icon-log-in me-1"></i> Login
-          </a>
-        </li>
+      <li class="nav-item">
+        <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">
+          <i class="feather icon-log-in me-1"></i> Login
+        </a>
+      </li>
       {% endif %}
     </ul>
   </div>
