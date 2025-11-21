@@ -122,6 +122,21 @@ class PositionListView(LoginRequiredMixin, generic.ListView):
     template_name = "home/position_list.html"
 
 
+class PositionDetailView(LoginRequiredMixin, generic.DetailView):
+    """
+    Class-based view that displays a detail of position.
+    Uses the 'home/position_detail.html' template.
+    """
+    model = Position
+    template_name = "home/position_detail.html"
+    context_object_name = "position"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["workers"] = self.object.workers.all()
+        return context
+
+
 class PositionCreateView(LoginRequiredMixin, generic.CreateView):
     """
     Creates a new position using Django's generic CreateView.
