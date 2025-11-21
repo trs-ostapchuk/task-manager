@@ -1,0 +1,51 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<div class="pcoded-main-container">
+  <div class="pcoded-content">
+
+    <div class="page-header">
+      <div class="page-block">
+        <div class="row align-items-center">
+          <div class="col-md-12">
+            <div class="page-header-title">
+              <h5 class="m-b-10">Delete Position</h5>
+            </div>
+            <ul class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="{% url 'tasks:position-list' %}"><i class="feather icon-users"></i></a>
+              </li>
+              <li class="breadcrumb-item"><a href="#">Delete</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h5>Confirm deletion</h5>
+      </div>
+      <div class="card-body text-center">
+
+        <p class="mb-4">
+          Are you sure you want to delete worker:
+          <strong>{{ object.name }}</strong>?
+        </p>
+
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger me-2">
+            <i class="feather icon-trash"></i> Delete
+          </button>
+          <a href="{% url 'tasks:position-list' %}" class="btn btn-secondary">
+            Cancel
+          </a>
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

@@ -142,6 +142,15 @@ class PositionUpdateView(LoginRequiredMixin, generic.UpdateView):
     success_url = reverse_lazy("tasks:position-list")
 
 
+class PositionDeleteView(LoginRequiredMixin, generic.DeleteView):
+    """
+    Delete position using Django's generic CreateView.
+    """
+    model = Position
+    template_name = "home/position_confirm_delete.html"
+    success_url = reverse_lazy("tasks:position-list")
+
+
 class TaskListView(LoginRequiredMixin, generic.ListView):
     """
     Class-based view that displays a list of all tasks.
