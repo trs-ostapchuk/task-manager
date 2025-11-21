@@ -132,6 +132,16 @@ class PositionCreateView(LoginRequiredMixin, generic.CreateView):
     success_url = reverse_lazy("tasks:position-list")
 
 
+class PositionUpdateView(LoginRequiredMixin, generic.UpdateView):
+    """
+    Update position using Django's generic CreateView.
+    """
+    model = Position
+    form_class = PositionForm
+    template_name = "home/position_form.html"
+    success_url = reverse_lazy("tasks:position-list")
+
+
 class TaskListView(LoginRequiredMixin, generic.ListView):
     """
     Class-based view that displays a list of all tasks.
