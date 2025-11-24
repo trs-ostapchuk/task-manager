@@ -69,13 +69,17 @@ class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
         worker = self.get_object()
         tasks = worker.tasks.all()
         total = tasks.count()
-        completed = tasks.filter(is_completed=True).count()
-        in_progress = total - completed
-        completion_percent = int((completed / total) * 100) if total > 0 else 0
+        completed = tasks.filter(is_completed=True)
+        pending = tasks.filter(is_completed=False)
+        completed_count = completed.count()
+        in_progress = total - completed_count
+        completion_percent = int((completed_count / total) * 100) if total > 0 else 0
 
         context.update({
+            "completed_list": completed,
+            "pending_list": pending,
             "total_tasks": total,
-            "completed_tasks": completed,
+            "completed_tasks": completed_count,
             "in_progress_tasks": in_progress,
             "completion_percent": completion_percent,
         })
