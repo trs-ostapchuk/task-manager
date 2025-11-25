@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count, Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -11,11 +12,57 @@ from tasks.forms import (
     WorkerSearchForm,
     TaskSearchForm, PositionForm,
 )
-from tasks.models import Worker, Position, Task
+from tasks.models import Worker, Position, Task, TaskType
 
 
 def index(request: HttpRequest) -> HttpResponse:
-    return render(request, "home/index.html")
+    """
+    Dashboard.
+
+    Collects and aggregates statistics about tasks, workers, and task types
+    for display on the main analytics dashboard.
+
+    Returned context includes:
+    - total_tasks: total number of tasks in the system
+    - completed_tasks: number of completed tasks
+    - pending_tasks: number of incomplete tasks
+    - urgent_tasks: number of tasks with 'Urgent' priority
+    - worker_count: total number of workers
+    - top_priority_tasks: top 5 tasks sorted by priority/importance
+    - leaderboard: workers ranked by number of completed tasks
+    - top_types: most active task types along with percentage distribution
+      (used for progress bars)
+
+    This view powers the main overview page of the application.
+    """
+
+    tasks = Task.objects.all()
+
+    context = {
+        "total_tasks": tasks.count(),
+        "completed_tasks": tasks.filter(is_completed=True).count(),
+        "pending_tasks": tasks.filter(is_completed=False).count(),
+        "urgent_tasks": tasks.filter(priority="Urgent").count(),
+        "worker_count": Worker.objects.count(),
+
+        # Top priority tasks
+        "top_priority_tasks": tasks.filter(priority__in=["Urgent", "High"]).order_by("deadline")[:5],
+
+        # Leaderboard
+        "leaderboard": Worker.objects.annotate(
+            completed_count=Count("tasks", filter=Q(tasks__is_completed=True))
+        ).order_by("-completed_count")[:5],
+
+        # Task types
+        "top_types": TaskType.objects.annotate(task_count=Count("tasks")).order_by("-task_count")[:5],
+    }
+
+    # add percentage for progressbar
+    total = context["total_tasks"] or 1
+    for t in context["top_types"]:
+        t.percentage = round((t.task_count / total) * 100)
+
+    return render(request, "home/index.html", context)
 
 
 class WorkerListView(LoginRequiredMixin, generic.ListView):
