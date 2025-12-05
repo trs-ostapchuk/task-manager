@@ -25,26 +25,6 @@ A **Django-based Task Manager** application to manage **workers**, **tasks**, an
 
 ---
 
-## 📸 Screenshots
-DB_Structure
-![DB](screenshots/db_structure.webp)
-Dashboard
-![Dashboard](screenshots/dashboard.png)
-Workers List
-![Workers](screenshots/workers.png)
-Tasks List
-![Tasks](screenshots/tasks.png)
-Positions List
-![Positions](screenshots/positions.png)
-Worker Profile
-![Worker Profile](screenshots/worker_profile.png)
-Task Profile
-![Task Profile](screenshots/task_profile.png)
-Create Task
-![Create Task](screenshots/create_task.png)
-
----
-
 ## 🛠 Installation
 
 1. **Clone the repository**
