@@ -1,0 +1,280 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count, Q
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views import generic
+
+from tasks.forms import (
+    WorkerCreationForm,
+    WorkerUpdateForm,
+    TaskForm,
+    WorkerSearchForm,
+    TaskSearchForm, PositionForm,
+)
+from tasks.models import Worker, Position, Task, TaskType
+
+
+def index(request: HttpRequest) -> HttpResponse:
+    """
+    Dashboard.
+
+    Collects and aggregates statistics about tasks, workers, and task types
+    for display on the main analytics dashboard.
+
+    Returned context includes:
+    - total_tasks: total number of tasks in the system
+    - completed_tasks: number of completed tasks
+    - pending_tasks: number of incomplete tasks
+    - urgent_tasks: number of tasks with 'Urgent' priority
+    - worker_count: total number of workers
+    - top_priority_tasks: top 5 tasks sorted by priority/importance
+    - leaderboard: workers ranked by number of completed tasks
+    - top_types: most active task types along with percentage distribution
+      (used for progress bars)
+
+    This view powers the main overview page of the application.
+    """
+
+    tasks = Task.objects.all()
+
+    context = {
+        "total_tasks": tasks.count(),
+        "completed_tasks": tasks.filter(is_completed=True).count(),
+        "pending_tasks": tasks.filter(is_completed=False).count(),
+        "urgent_tasks": tasks.filter(priority="Urgent").count(),
+        "worker_count": Worker.objects.count(),
+
+        # Top priority tasks
+        "top_priority_tasks": tasks.filter(priority__in=["Urgent", "High"]).order_by("deadline")[:5],
+
+        # Leaderboard
+        "leaderboard": Worker.objects.annotate(
+            completed_count=Count("tasks", filter=Q(tasks__is_completed=True))
+        ).order_by("-completed_count")[:5],
+
+        # Task types
+        "top_types": TaskType.objects.annotate(task_count=Count("tasks")).order_by("-task_count")[:5],
+    }
+
+    # add percentage for progressbar
+    total = context["total_tasks"] or 1
+    for t in context["top_types"]:
+        t.percentage = round((t.task_count / total) * 100)
+
+    return render(request, "home/index.html", context)
+
+
+class WorkerListView(LoginRequiredMixin, generic.ListView):
+    """
+    Class-based view that displays a list of all workers.
+    Uses the 'home/worker_list.html' template.
+    """
+    model = Worker
+    template_name = "home/worker_list.html"
+    paginate_by = 10
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(WorkerListView, self).get_context_data(**kwargs)
+        username = self.request.GET.get("username", "")
+        context["search_form"] = WorkerSearchForm(
+            initial={"username": username}
+        )
+        return context
+
+    def get_queryset(self):
+        """
+        Returns a queryset of all workers with their related tasks preloaded.
+        Using `prefetch_related("tasks")` improves performance by avoiding
+        the N+1 query problem when accessing each worker’s tasks.
+        Implement search by username
+        """
+        queryset = Worker.objects.prefetch_related("tasks")
+        form = WorkerSearchForm(self.request.GET)
+        if form.is_valid():
+            queryset = queryset.filter(username__icontains=form.cleaned_data["username"])
+        return queryset
+
+
+class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
+    """
+    Class-based view for displaying detailed information about a single worker.
+    Shows basic info along with statistics about their assigned tasks.
+    """
+    model = Worker
+    template_name = "home/worker_detail.html"
+
+    def get_context_data(self, **kwargs):
+        """
+        Adds extra context variables to the template:
+        - total_tasks: total number of tasks assigned to the worker
+        - completed_tasks: how many tasks are completed
+        - in_progress_tasks: how many are still in progress
+        - completion_percent: percentage of completed tasks
+        """
+        context = super().get_context_data(**kwargs)
+        worker = self.get_object()
+        tasks = worker.tasks.all()
+        total = tasks.count()
+        completed = tasks.filter(is_completed=True)
+        pending = tasks.filter(is_completed=False)
+        completed_count = completed.count()
+        in_progress = total - completed_count
+        completion_percent = int((completed_count / total) * 100) if total > 0 else 0
+
+        context.update({
+            "completed_list": completed,
+            "pending_list": pending,
+            "total_tasks": total,
+            "completed_tasks": completed_count,
+            "in_progress_tasks": in_progress,
+            "completion_percent": completion_percent,
+        })
+
+        return context
+
+
+class WorkerCreateView(LoginRequiredMixin, generic.CreateView):
+    """
+    Allows authenticated users to create a new worker.
+    Redirects to the worker list after successful creation.
+    """
+    model = Worker
+    form_class = WorkerCreationForm
+    success_url = reverse_lazy("tasks:worker-list")
+    template_name = "home/worker_form.html"
+
+
+class WorkerUpdateView(LoginRequiredMixin, generic.UpdateView):
+    """
+    Allows editing of an existing worker's profile.
+    """
+    model = Worker
+    form_class = WorkerUpdateForm
+    template_name = "home/worker_form.html"
+    success_url = reverse_lazy("home:worker-list")
+
+
+class WorkerDeleteView(LoginRequiredMixin, generic.DeleteView):
+    """
+    Allows deleting a worker (user account) with confirmation page.
+    """
+    model = Worker
+    template_name = "home/worker_confirm_delete.html"
+    success_url = reverse_lazy("tasks:worker-list")
+
+
+class PositionListView(LoginRequiredMixin, generic.ListView):
+    """
+    Class-based view that displays a list of all position.
+    Uses the 'home/position_list.html' template.
+    """
+    model = Position
+    template_name = "home/position_list.html"
+
+
+class PositionDetailView(LoginRequiredMixin, generic.DetailView):
+    """
+    Class-based view that displays a detail of position.
+    Uses the 'home/position_detail.html' template.
+    """
+    model = Position
+    template_name = "home/position_detail.html"
+    context_object_name = "position"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["workers"] = self.object.workers.all()
+        return context
+
+
+class PositionCreateView(LoginRequiredMixin, generic.CreateView):
+    """
+    Creates a new position using Django's generic CreateView.
+    """
+    model = Position
+    form_class = PositionForm
+    template_name = "home/position_form.html"
+    success_url = reverse_lazy("tasks:position-list")
+
+
+class PositionUpdateView(LoginRequiredMixin, generic.UpdateView):
+    """
+    Update position using Django's generic CreateView.
+    """
+    model = Position
+    form_class = PositionForm
+    template_name = "home/position_form.html"
+    success_url = reverse_lazy("tasks:position-list")
+
+
+class PositionDeleteView(LoginRequiredMixin, generic.DeleteView):
+    """
+    Delete position using Django's generic CreateView.
+    """
+    model = Position
+    template_name = "home/position_confirm_delete.html"
+    success_url = reverse_lazy("tasks:position-list")
+
+
+class TaskListView(LoginRequiredMixin, generic.ListView):
+    """
+    Class-based view that displays a list of all tasks.
+    Uses the 'home/task_list.html' template.
+    """
+    model = Task
+    template_name = "home/task_list.html"
+    paginate_by = 10
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(TaskListView, self).get_context_data(**kwargs)
+        name = self.request.GET.get("name", "")
+        context["search_form"] = TaskSearchForm(
+            initial={"name": name}
+        )
+        return context
+
+    def get_queryset(self):
+        queryset = Task.objects.select_related("task_type").prefetch_related("assignees")
+        form = TaskSearchForm(self.request.GET)
+        if form.is_valid():
+            queryset = queryset.filter(name__icontains=form.cleaned_data["name"])
+        return queryset
+
+
+class TaskDetailView(LoginRequiredMixin, generic.DetailView):
+    """
+    Class-based view that displays a detail of task.
+    Uses the 'home/task_detail.html' template.
+    """
+    model = Task
+    template_name = "home/task_detail.html"
+
+
+class TaskCreateView(LoginRequiredMixin, generic.CreateView):
+    """
+    Creates a new task using Django's generic CreateView.
+    """
+    model = Task
+    form_class = TaskForm
+    template_name = "home/task_form.html"
+    success_url = reverse_lazy("tasks:task-list")
+
+
+class TaskUpdateView(LoginRequiredMixin, generic.UpdateView):
+    """
+    Allows editing an existing task.
+    """
+    model = Task
+    form_class = TaskForm
+    template_name = "home/task_form.html"
+    success_url = reverse_lazy("tasks:task-list")
+
+
+class TaskDeleteView(LoginRequiredMixin, generic.DeleteView):
+    """
+    Deletes an existing task.
+    """
+    model = Task
+    template_name = "home/task_confirm_delete.html"
+    success_url = reverse_lazy("tasks:task-list")

@@ -1,0 +1,66 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="pcoded-main-container">
+  <div class="pcoded-content">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="page-block">
+        <div class="row align-items-center">
+          <div class="col-md-12">
+            <div class="page-header-title">
+              <h5 class="m-b-10">{{ object|yesno:"Update,Create" }} Worker</h5>
+            </div>
+            <ul class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="{% url 'tasks:worker-list' %}"><i class="feather icon-users"></i></a>
+              </li>
+              <li class="breadcrumb-item"><a href="{% url 'tasks:worker-list' %}">Workers</a></li>
+              <li class="breadcrumb-item"><a href="#">Create Worker</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card">
+      <div class="card-header">
+        <h5>Add a New Worker</h5>
+      </div>
+      <div class="card-body">
+
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          {% for field in form %}
+            <div class="mb-3">
+              <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {{ field }}
+              {% if field.help_text %}
+                <small class="form-text text-muted">{{ field.help_text }}</small>
+              {% endif %}
+              {% for error in field.errors %}
+                <div class="text-danger small">{{ error }}</div>
+              {% endfor %}
+            </div>
+          {% endfor %}
+
+          <div class="mt-4 d-flex justify-content-between">
+            <a href="{% url 'tasks:worker-list' %}" class="btn btn-outline-secondary">
+              <i class="feather icon-arrow-left"></i> Back
+            </a>
+            <button type="submit" class="btn btn-primary">
+              <i class="feather icon-save"></i> Save Worker
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

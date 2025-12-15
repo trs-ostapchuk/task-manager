@@ -1,0 +1,165 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<!-- [ Main Content ] start -->
+<div class="pcoded-main-container">
+  <div class="pcoded-content">
+    <div class="row">
+
+      <!-- Completed Tasks -->
+      <div class="col-md-6 col-xl-3">
+        <div class="card bg-c-green order-card">
+          <div class="card-body">
+            <h6 class="text-white">Completed Tasks</h6>
+            <h2 class="text-end text-white">
+              <i class="feather icon-check-circle float-start"></i>
+              <span>{{ completed_tasks }}</span>
+            </h2>
+            <p class="m-b-0">All Tasks <span class="float-end">{{ total_tasks }}</span></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pending Tasks -->
+      <div class="col-md-6 col-xl-3">
+        <div class="card bg-c-red order-card">
+          <div class="card-body">
+            <h6 class="text-white">Pending Tasks</h6>
+            <h2 class="text-end text-white">
+              <i class="feather icon-clock float-start"></i>
+              <span>{{ pending_tasks }}</span>
+            </h2>
+            <p class="m-b-0">Not Completed</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Urgent Tasks -->
+      <div class="col-md-6 col-xl-3">
+        <div class="card bg-c-yellow order-card">
+          <div class="card-body">
+            <h6 class="text-white">Urgent Tasks</h6>
+            <h2 class="text-end text-white">
+              <i class="feather icon-alert-triangle float-start"></i>
+              <span>{{ urgent_tasks }}</span>
+            </h2>
+            <p class="m-b-0">High Priority</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Workers -->
+      <div class="col-md-6 col-xl-3">
+        <div class="card bg-c-blue order-card">
+          <div class="card-body">
+            <h6 class="text-white">Workers</h6>
+            <h2 class="text-end text-white">
+              <i class="feather icon-users float-start"></i>
+              <span>{{ worker_count }}</span>
+            </h2>
+            <p class="m-b-0">Active Staff</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Priority Tasks -->
+      <div class="col-md-12 col-xl-6">
+        <div class="card">
+          <div class="card-header">
+            <h5>Most Priority Tasks</h5>
+          </div>
+          <div class="card-body">
+            {% if top_priority_tasks %}
+              <ul class="list-group">
+                {% for task in top_priority_tasks %}
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="{% url 'tasks:task-detail' task.id %}">{{ task.name }}</a>
+                    <span class="badge bg-danger">{{ task.priority }}</span>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p>No high-priority tasks 🎉</p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Leaderboard -->
+      <div class="col-md-12 col-xl-6">
+        <div class="card">
+          <div class="card-header">
+            <h5>Top Workers (by completed tasks)</h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-group">
+              {% for worker in leaderboard %}
+                <li class="list-group-item d-flex justify-content-between">
+                  <div>
+                    <strong>{{ worker.username }}</strong>
+                    {% if worker.position %}
+                      <span class="text-muted"> — {{ worker.position.name }}</span>
+                    {% endif %}
+                  </div>
+                  <span class="badge bg-success">{{ worker.completed_count }} done</span>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task Types -->
+      <div class="col-md-12 col-xl-4">
+        <div class="card">
+          <div class="card-header">
+            <h5>Most Active Task Types</h5>
+          </div>
+          <div class="card-body">
+            {% for type in top_types %}
+              <p class="mb-1">{{ type.name }}
+                <span class="float-end">{{ type.task_count }} tasks</span>
+              </p>
+              <div class="progress mb-2">
+                <div class="progress-bar bg-primary" style="width: {{ type.percentage }}%"></div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Weekly Tasks -->
+      <div class="col-md-12 col-xl-8">
+        <div class="card">
+          <div class="card-header">
+            <h5>Tasks Created This Week</h5>
+          </div>
+          <div class="card-body">
+            <div id="weekly-tasks-chart"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- [ Main Content ] end -->
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+<!-- Apex Chart -->
+<script src="/static/assets/js/plugins/apexcharts.min.js"></script>
+
+<!-- custom-chart js -->
+<script src="/static/assets/js/pages/dashboard-main.js"></script>
+
+{% endblock javascripts %}

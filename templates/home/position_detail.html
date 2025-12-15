@@ -1,0 +1,78 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="pcoded-main-container">
+  <div class="pcoded-content">
+
+    <!-- Header -->
+    <div class="page-header">
+      <div class="page-block">
+        <div class="row align-items-center">
+          <div class="col-md-12">
+            <div class="page-header-title">
+              <h5 class="m-b-10">Position Details</h5>
+            </div>
+
+            <ul class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="{% url 'tasks:position-list' %}">
+                  <i class="feather icon-briefcase"></i>
+                </a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="{% url 'tasks:position-list' %}">Positions</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="#">Details</a>
+              </li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Position Details -->
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>{{ position.name }}</h5>
+
+        <a href="{% url 'tasks:position-update' position.id %}" class="btn btn-sm btn-warning">
+          <i class="feather icon-edit"></i> Edit
+        </a>
+      </div>
+
+      <div class="card-body">
+
+        <h6 class="mb-3"><strong>Total Workers:</strong> {{ workers.count }}</h6>
+
+        <hr>
+
+        <h5 class="mb-3">Workers on this Position</h5>
+
+        {% if workers %}
+          <ul class="list-group">
+            {% for worker in workers %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <span>
+                <i class="feather icon-user"></i>
+                {{ worker.username }}
+              </span>
+
+              <a href="{% url 'tasks:worker-detail' worker.id %}" class="btn btn-primary btn-sm">
+                View Profile
+              </a>
+            </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-muted">No workers assigned to this position.</p>
+        {% endif %}
+
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

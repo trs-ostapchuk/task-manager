@@ -1,0 +1,78 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="pcoded-main-container">
+  <div class="pcoded-content">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="page-block">
+        <div class="row align-items-center">
+          <div class="col-md-12">
+            <div class="page-header-title">
+              <h5 class="m-b-10">{{ object|yesno:"Update,Create" }} Position</h5>
+            </div>
+            <ul class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="{% url 'tasks:position-list' %}">
+                  <i class="feather icon-briefcase"></i>
+                </a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="{% url 'tasks:position-list' %}">Positions</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="#">
+                  {{ object|yesno:"Update,Create" }} Position
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Card -->
+    <div class="card">
+      <div class="card-header">
+        <h5>{{ object|yesno:"Update,Create" }} Position</h5>
+      </div>
+
+      <div class="card-body">
+        <form method="post">
+          {% csrf_token %}
+
+          <!-- Single Field (name) -->
+          <div class="mb-3">
+            <label class="form-label" for="{{ form.name.id_for_label }}">
+              {{ form.name.label }}
+            </label>
+            {{ form.name }}
+
+            {% if form.name.help_text %}
+              <small class="form-text text-muted">{{ form.name.help_text }}</small>
+            {% endif %}
+
+            {% for error in form.name.errors %}
+              <div class="text-danger small">{{ error }}</div>
+            {% endfor %}
+          </div>
+
+          <!-- Buttons -->
+          <div class="mt-4 d-flex justify-content-between">
+            <a href="{% url 'tasks:position-list' %}" class="btn btn-outline-secondary">
+              <i class="feather icon-arrow-left"></i> Back
+            </a>
+
+            <button type="submit" class="btn btn-primary">
+              <i class="feather icon-save"></i> Save
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+<!-- [ Header ] start -->
+<header class="navbar pcoded-header navbar-expand-lg navbar-light headerpos-fixed header-blue">
+
+  <div class="m-header">
+    <a class="mobile-menu" id="mobile-collapse" href="#"><span></span></a>
+    <a href="/" class="b-brand" style="font-weight: bold; font-size: 24px; color: #fff;">
+      TaskManager
+    </a>
+    <a href="#" class="mob-toggler">
+      <i class="feather icon-more-vertical"></i>
+    </a>
+  </div>
+
+  <div class="collapse navbar-collapse">
+
+    <!-- Right-side auth navigation -->
+    <ul class="navbar-nav ms-auto align-items-center">
+      {% if request.user.is_authenticated %}
+      <li class="nav-item me-3 text-white">
+        Hello, <strong>{{ request.user.username }}</strong>
+      </li>
+      <li class="nav-item">
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-light btn-sm">
+            <i class="feather icon-log-out me-1"></i> Logout
+          </button>
+        </form>
+      </li>
+      {% else %}
+      <li class="nav-item">
+        <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">
+          <i class="feather icon-log-in me-1"></i> Login
+        </a>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+
+</header>
+<!-- [ Header ] end -->

@@ -1,0 +1,29 @@
+<!-- [ navigation menu ] start -->
+<nav class="pcoded-navbar menupos-fixed menu-light">
+  <div class="navbar-wrapper">
+    <div class="navbar-content scroll-div">
+      <ul class="nav pcoded-inner-navbar">
+        <li class="nav-item">
+          <a href="{% url 'tasks:index' %}" class="nav-link "><span class="pcoded-micon"><i
+              class="feather icon-home"></i></span><span
+              class="pcoded-mtext">Dashboard</span></a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'tasks:worker-list' %}" class="nav-link "><span class="pcoded-micon"><i
+              class="feather icon-users"></i></span><span class="pcoded-mtext">All workers</span></a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'tasks:task-list' %}" class="nav-link "><span class="pcoded-micon"><i
+              class="feather icon-check-square"></i></span><span class="pcoded-mtext">All tasks</span></a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'tasks:position-list' %}" class="nav-link "><span class="pcoded-micon"><i
+              class="feather icon-briefcase"></i></span><span class="pcoded-mtext">All position</span></a>
+        </li>
+
+      </ul>
+
+    </div>
+  </div>
+</nav>
+<!-- [ navigation menu ] end -->

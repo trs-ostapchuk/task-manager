@@ -1,0 +1,5 @@
+Git: https://github.com/trs-ostapchuk/task-manager.git
+Site: https://task-manager-deploy-o5a1.onrender.com
+
+Login: admin
+Password: 12345 😉

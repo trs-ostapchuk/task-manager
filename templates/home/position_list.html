@@ -1,0 +1,88 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="pcoded-main-container">
+  <div class="pcoded-content">
+
+    <!-- Header -->
+    <div class="page-header">
+      <div class="page-block">
+        <div class="row align-items-center">
+          <div class="col-md-12">
+            <div class="page-header-title">
+              <h5 class="m-b-10">Positions List</h5>
+            </div>
+            <ul class="breadcrumb">
+              <li class="breadcrumb-item">
+                <a href="#"><i class="feather icon-briefcase"></i></a>
+              </li>
+              <li class="breadcrumb-item"><a href="#">Positions</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5>All Positions</h5>
+
+        <a href="{% url 'tasks:position-create' %}" class="btn btn-primary">
+          <i class="feather icon-briefcase me-1"></i> Add Position
+        </a>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>Position Name</th>
+              <th>Number of Workers</th>
+              <th>Update</th>
+              <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for position in position_list %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>
+                <a href="{% url 'tasks:position-detail' position.id %}">
+                  {{ position.name }}
+                </a>
+              </td>
+              <td>
+                  <span class="badge bg-primary">
+                    {{ position.workers.count }}
+                  </span>
+              </td>
+              <td>
+                <a href="{% url 'tasks:position-update' position.id %}" class="btn btn-sm btn-warning">
+                  Edit Position
+                </a>
+              </td>
+              <td>
+                <a href="{% url 'tasks:position-delete' position.id %}" class="btn btn-sm btn-danger">
+                  Delete Position
+                </a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="3" class="text-center text-muted">
+                No positions found
+              </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
